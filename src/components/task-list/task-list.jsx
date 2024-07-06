@@ -6,7 +6,7 @@ import '../task/task.css';
 
 export default class TaskList extends Component {
     render() {
-        const { tasks, onDeleted, onEdited } = this.props;
+        const { tasks, onDeleted, onEdited,  onToggle } = this.props;
 
         const tasksList = tasks.map(task => (
             <Task
@@ -14,6 +14,7 @@ export default class TaskList extends Component {
                 task={task}
                 onDeleted={onDeleted}
                 onEdited={onEdited}
+                onToggle={onToggle}
             />
         ));
 

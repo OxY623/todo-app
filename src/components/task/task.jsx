@@ -7,19 +7,18 @@ export default class Task extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            toggleOn: false,
             editing: false,
             editText: props.task.title,
         };
     }
-
-    onCheckboxClick = () => {
-        this.setState(({ toggleOn }) => {
-            return {
-                toggleOn: !toggleOn,
-            }
-        })
-    }
+// Delete
+    // onCheckboxClick = () => {
+    //     this.setState(({ toggleOn }) => {
+    //         return {
+    //             toggleOn: !toggleOn,
+    //         }
+    //     })
+    // }
 
     onSwitchEditing = () => {
         this.setState(({ editing }) => {
@@ -39,21 +38,17 @@ export default class Task extends Component {
     }
 
     render() {
-        const { onDeleted, task } = this.props;
-        const { toggleOn, editing, editText } = this.state;
-
-        let checked = false;
-        let classNames = '';
-        if (toggleOn) {
-            classNames += 'completed';
-            checked = true;
-        }
+        const { onDeleted, task, onToggle } = this.props;
+        const { editing, editText } = this.state;
+        const onToggleItem = onToggle.bind(this, task.id);
+        let classNames = task.completed ? 'completed' : '';
+      
 
 
-        if (editing && !toggleOn) {
+        if (editing && task.checked) {
             classNames = 'editing';
-            checked = false;
         }
+
         const createdTask = formatDistanceToNow(new Date(task.created));
 
         return (
@@ -62,8 +57,7 @@ export default class Task extends Component {
                     <input
                         className="toggle"
                         type="checkbox"
-                        checked={checked}
-                        onChange={this.onCheckboxClick}
+                        onChange={onToggleItem}
                     />
                     <label>
                         <span className="description">{task.title}</span>

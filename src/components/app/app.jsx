@@ -10,23 +10,40 @@ import '../task-list/task-list.css';
 export default class App extends Component {
     constructor(props) {
         super(props);
+        this.maxId = 100;
         this.state = {
             tasks: [
-                {id: 1, title: 'Completed task', completed: true, created: new Date()},
-                {id: 2, title: 'Editing task', completed: false, created: new Date()},
-                {id: 3, title: 'Active task', completed: false, created: new Date()},
+                // {id: 1, title: 'Completed task', completed: true, created: new Date()},
+                // {id: 2, title: 'Editing task', completed: false, created: new Date()},
+                // {id: 3, title: 'Active task', completed: false, created: new Date()},
+                this.createTodoItem('Completed task'),
+                this.createTodoItem('Editing task'),
+                this.createTodoItem('Active task'),
+
+
             ]
         }
     }
 
+    createTodoItem = (label) => {
+        return {
+            id: ++this.maxId,
+            title:label,
+            completed: false,
+            created: new Date(),
+        };
+
+    }
+
     addTaskItem = (text) => {
-        try{
+        try {
             this.setState((state) => {
-                const id = state.tasks.length + 1;
-                const newTask = {id, title: text, completed: false, created: new Date()};
+                // const id = state.tasks.length + 1;
+                // const newTask = {id, title: text, completed: false, created: new Date()};
+                const newTask = this.createTodoItem(text);
                 return ({tasks: [...state.tasks, newTask]});
             });
-        } finally{
+        } finally {
             console.log(this.state.tasks);
         }
 
@@ -42,12 +59,26 @@ export default class App extends Component {
     editTaskItem = (id, newText) => {
         this.setState((state) => {
             const updatedTasks = state.tasks.map(task => {
-                 return (task.id === id) ? {
+                return (task.id === id) ? {
                     ...task,
                     title: newText,
                     created: new Date(),
                 } : task;
 
+            });
+
+            return {tasks: updatedTasks};
+        });
+    }
+
+    toggleTaskItem = (id) => {
+        console.log(id);
+        this.setState((state) => {
+            const updatedTasks = state.tasks.map(task => {
+                return (task.id === id) ? {
+                   ...task,
+                    completed:!task.completed,
+                } : task;
             });
 
             return {tasks: updatedTasks};
@@ -67,6 +98,7 @@ export default class App extends Component {
                     <TaskList
                         onDeleted={this.deleteTaskItem}
                         onEdited={this.editTaskItem}
+                        onToggle={this.toggleTaskItem}
                         tasks={tasks}
                     />
                     <Footer/>
