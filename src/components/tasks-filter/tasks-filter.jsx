@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import FilterItem from '../filter-item';
 import '../tasks-filter/tasks-filter.css';
+import PropTypes from 'prop-types';
 
 /* eslint-disable react/prop-types */
 
@@ -39,3 +40,18 @@ export default class TasksFilter extends Component {
         );
     }
 }
+
+TasksFilter.defaultProps = {
+    filterItems: [],
+    onFilterChange: () => {}
+};
+
+TasksFilter.propTypes = {
+    filterItems: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired
+    })).isRequired,
+    onFilterChange: PropTypes.func.isRequired,
+}
+
+

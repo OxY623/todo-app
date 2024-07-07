@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {formatDistanceToNow} from "date-fns"
+import PropTypes from 'prop-types';
 
 /* eslint-disable react/prop-types */
 
@@ -71,3 +72,15 @@ export default class Task extends Component {
         );
     }
 }
+Task.defaultProps = {
+    task: {},
+    onDeleted: () => {},
+    onToggle: () => {},
+    onEdited: () => {},
+};
+Task.propTypes = {
+    task: PropTypes.object.isRequired,
+    onDeleted: PropTypes.func.isRequired,
+    onToggle: PropTypes.func.isRequired,
+    onEdited: PropTypes.func.isRequired,
+};

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import TasksFilter from "../tasks-filter";
 import '../tasks-filter/tasks-filter.css';
+import PropTypes from 'prop-types';
 
 /* eslint-disable react/prop-types */
 
@@ -18,4 +19,16 @@ export default class Footer extends Component {
             </footer>
         );
     }
+}
+Footer.defaultProps = {
+    clearCompleted :  () => {},
+    filterItems :[],
+    setFilter : () => {},
+    count : 5,
+}
+Footer.propTypes = {
+    clearCompleted : PropTypes.func,
+    filterItems : PropTypes.array.isRequired,
+    setFilter : PropTypes.func,
+    count : PropTypes.number,
 }
