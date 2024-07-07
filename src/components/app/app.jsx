@@ -11,97 +11,89 @@ export default class App extends Component {
     constructor(props) {
         super(props);
         this.maxId = 100;
+        this.filterItems = [
+            { id: 1, name: "All" },
+            { id: 2, name: "Active" },
+            { id: 3, name: "Completed" }
+        ];
         this.state = {
             tasks: [
-                // {id: 1, title: 'Completed task', completed: true, created: new Date()},
-                // {id: 2, title: 'Editing task', completed: false, created: new Date()},
-                // {id: 3, title: 'Active task', completed: false, created: new Date()},
                 this.createTodoItem('Completed task'),
                 this.createTodoItem('Editing task'),
-                this.createTodoItem('Active task'),
-
-
-            ]
-        }
+                this.createTodoItem('Active task')
+            ],
+            filter: 'All'
+        };
     }
 
     createTodoItem = (label) => {
         return {
             id: ++this.maxId,
-            title:label,
+            title: label,
             completed: false,
-            created: new Date(),
+            created: new Date()
         };
-
     }
 
     addTaskItem = (text) => {
-        try {
-            this.setState((state) => {
-                // const id = state.tasks.length + 1;
-                // const newTask = {id, title: text, completed: false, created: new Date()};
-                const newTask = this.createTodoItem(text);
-                return ({tasks: [...state.tasks, newTask]});
-            });
-        } finally {
-            console.log(this.state.tasks);
-        }
-
+        this.setState((state) => {
+            const newTask = this.createTodoItem(text);
+            return { tasks: [...state.tasks, newTask] };
+        });
     }
 
     deleteTaskItem = (id) => {
         this.setState((state) => {
             const updatedTasks = state.tasks.filter(task => task.id !== id);
-            return {tasks: updatedTasks};
+            return { tasks: updatedTasks };
         });
     }
 
     editTaskItem = (id, newText) => {
         this.setState((state) => {
             const updatedTasks = state.tasks.map(task => {
-                return (task.id === id) ? {
-                    ...task,
-                    title: newText,
-                    created: new Date(),
-                } : task;
-
+                return (task.id === id) ? { ...task, title: newText, created: new Date() } : task;
             });
-
-            return {tasks: updatedTasks};
+            return { tasks: updatedTasks };
         });
     }
 
     toggleTaskItem = (id) => {
-        console.log(id);
         this.setState((state) => {
             const updatedTasks = state.tasks.map(task => {
-                return (task.id === id) ? {
-                   ...task,
-                    completed:!task.completed,
-                } : task;
+                return (task.id === id) ? { ...task, completed: !task.completed } : task;
             });
-
-            return {tasks: updatedTasks};
+            return { tasks: updatedTasks };
         });
     }
 
+    setFilter = (filter) => {
+        this.setState({ filter });
+    }
+
     render() {
-        const {tasks} = this.state;
+        const { tasks, filter } = this.state;
+
+        const filteredTasks = tasks.filter(task => {
+            if (filter === 'Active') return !task.completed;
+            if (filter === 'Completed') return task.completed;
+            return true;
+        });
 
         return (
             <section className="todoapp">
                 <header className="header">
                     <h1>todos</h1>
-                    <NewTaskForm onAdded={this.addTaskItem}/>
+                    <NewTaskForm onAdded={this.addTaskItem} />
                 </header>
                 <section className="main">
                     <TaskList
                         onDeleted={this.deleteTaskItem}
                         onEdited={this.editTaskItem}
                         onToggle={this.toggleTaskItem}
-                        tasks={tasks}
+                        tasks={filteredTasks}
                     />
-                    <Footer/>
+                    <Footer filterItems={this.filterItems} setFilter={this.setFilter} />
                 </section>
             </section>
         );

@@ -11,14 +11,6 @@ export default class Task extends Component {
             editText: props.task.title,
         };
     }
-// Delete
-    // onCheckboxClick = () => {
-    //     this.setState(({ toggleOn }) => {
-    //         return {
-    //             toggleOn: !toggleOn,
-    //         }
-    //     })
-    // }
 
     onSwitchEditing = () => {
         this.setState(({ editing }) => {
@@ -41,14 +33,14 @@ export default class Task extends Component {
         const { onDeleted, task, onToggle } = this.props;
         const { editing, editText } = this.state;
         const onToggleItem = onToggle.bind(this, task.id);
+
         let classNames = task.completed ? 'completed' : '';
-      
-
-
-        if (editing && task.checked) {
+        if (editing && !task.completed) {
             classNames = 'editing';
         }
 
+        // console.log(editing);
+        // console.log(classNames);
         const createdTask = formatDistanceToNow(new Date(task.created));
 
         return (

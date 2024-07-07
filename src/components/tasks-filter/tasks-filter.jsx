@@ -1,21 +1,26 @@
 import React, {Component} from 'react';
+import FilterItem from '../filter-item';
+import '../tasks-filter/tasks-filter.css';
 
-export default class TaskFilter extends Component {
+/* eslint-disable react/prop-types */
+
+export default class TasksFilter extends Component {
     render() {
+        const { filterItems, onFilterChange } = this.props;
+
+        const filterElements = filterItems.map(filter => (
+            <li key={filter.id}>
+                <FilterItem
+                    label={filter.name}
+                    onFilterChange={onFilterChange}
+                />
+            </li>
+        ));
 
         return (
             <ul className="filters">
-                <li>
-                    <button className="selected">All</button>
-                </li>
-                <li>
-                    <button>Active</button>
-                </li>
-                <li>
-                    <button>Completed</button>
-                </li>
+                {filterElements}
             </ul>
         );
     }
 }
-
