@@ -3,7 +3,7 @@ import './filter-item.css';
 
 /* eslint-disable react/prop-types */
 
-const FilterItem = ({ label, onFilterChange, selected }) => {
+const FilterItem = ({label, onFilterChange, selected}) => {
 
     // const [selected, setSelected] = useState(false);
     // let classNames = '';
@@ -15,12 +15,13 @@ const FilterItem = ({ label, onFilterChange, selected }) => {
     let classNames = selected ? 'selected' : '';
 
     return (
-        <button className={classNames} onClick={() => {
-            // setSelected(!selected);
-            onFilterChange(label);
-        }}>
-            {label}
-        </button>
+            <button className={classNames} onClick={() => {
+                // setSelected(!selected);
+                onFilterChange(label);
+            }}>
+                {label}
+            </button>
+
     );
 }
 

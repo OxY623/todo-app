@@ -71,8 +71,18 @@ export default class App extends Component {
         this.setState({ filter });
     }
 
+    clearCompleted = () => {
+        this.setState((state) => {
+            const updatedTasks = state.tasks.filter(task =>!task.completed);
+            return { tasks: updatedTasks };
+        });
+    }
+
     render() {
         const { tasks, filter } = this.state;
+        let countItemsCompleted = tasks.reduce((acc, task) =>{
+            return !task.completed? acc : acc + 1;
+        }, 0);
 
         const filteredTasks = tasks.filter(task => {
             if (filter === 'Active') return !task.completed;
@@ -93,7 +103,13 @@ export default class App extends Component {
                         onToggle={this.toggleTaskItem}
                         tasks={filteredTasks}
                     />
-                    <Footer filterItems={this.filterItems} setFilter={this.setFilter} />
+                    <Footer
+                        clearCompleted = {this.clearCompleted}
+                        filterItems={this.filterItems}
+                        setFilter={this.setFilter}
+                        count = {countItemsCompleted}
+
+                    />
                 </section>
             </section>
         );
