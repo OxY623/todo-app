@@ -5,6 +5,9 @@ import '../tasks-filter/tasks-filter.css';
 /* eslint-disable react/prop-types */
 
 export default class TasksFilter extends Component {
+    constructor(props) {
+        super(props);
+    }
     render() {
         const { filterItems, onFilterChange } = this.props;
 
