@@ -7,15 +7,26 @@ import '../tasks-filter/tasks-filter.css';
 export default class TasksFilter extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            selectedFilter: null
+        };
     }
+
+    handleFilterChange = (label) => {
+        this.setState({ selectedFilter: label });
+        this.props.onFilterChange(label);
+    };
+
     render() {
         const { filterItems, onFilterChange } = this.props;
+        const { selectedFilter } = this.state;
 
         const filterElements = filterItems.map(filter => (
             <li key={filter.id}>
                 <FilterItem
                     label={filter.name}
-                    onFilterChange={onFilterChange}
+                    onFilterChange={this.handleFilterChange}
+                    selected={selectedFilter === filter.name}
                 />
             </li>
         ));
@@ -23,6 +34,7 @@ export default class TasksFilter extends Component {
         return (
             <ul className="filters">
                 {filterElements}
+                {}
             </ul>
         );
     }
