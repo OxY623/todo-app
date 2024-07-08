@@ -34,8 +34,11 @@ export default class Task extends Component {
         const { onDeleted, task, onToggle } = this.props;
         const { editing, editText } = this.state;
         const onToggleItem = onToggle.bind(this, task.id);
-
+        let checked = null;
         let classNames = task.completed ? 'completed' : '';
+        if (classNames==="completed"){
+            checked = 'checked';
+        }
         if (editing && !task.completed) {
             classNames = 'editing';
         }
@@ -51,6 +54,7 @@ export default class Task extends Component {
                         className="toggle"
                         type="checkbox"
                         onChange={onToggleItem}
+                        checked = {checked}
                     />
                     <label>
                         <span className="description">{task.title}</span>
