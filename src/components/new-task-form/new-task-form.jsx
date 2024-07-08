@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 
-/* eslint-disable react/prop-types */
+
 
 export default class NewTaskForm extends Component {
     constructor(props) {
@@ -25,3 +26,11 @@ export default class NewTaskForm extends Component {
         );
     }
 }
+
+NewTaskForm.propTypes = {
+    onAdded: PropTypes.func.isRequired
+};
+
+NewTaskForm.defaultProps = {
+    onAdded: () => {}
+};

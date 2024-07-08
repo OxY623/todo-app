@@ -6,7 +6,6 @@ import Footer from '../footer';
 import '../footer/footer.css';
 import TaskList from "../task-list";
 import '../task-list/task-list.css';
-import PropTypes from 'prop-types';
 
 export default class App extends Component {
     constructor(props) {
@@ -16,7 +15,6 @@ export default class App extends Component {
             this.createFilterItems(1, 'All'),
             this.createFilterItems(2, 'Active'),
             this.createFilterItems(3, 'Completed')
-
         ];
         this.state = {
             tasks: [
@@ -117,24 +115,9 @@ export default class App extends Component {
                         filterItems={this.filterItems}
                         setFilter={this.setFilter}
                         count={countItemsCompleted}
-
                     />
                 </section>
             </section>
         );
     }
-}
-
-App.defaultProps = {
-    tasks: [],
-    filter: 'All'
-}
-App.propTypes = {
-    tasks: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        title: PropTypes.string.isRequired,
-        completed: PropTypes.bool.isRequired,
-        created: PropTypes.instanceOf(Date).isRequired
-    })).isRequired,
-    filter: PropTypes.oneOf(['All', 'Active', 'Completed']).isRequired
 }

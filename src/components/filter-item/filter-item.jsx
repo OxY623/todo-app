@@ -1,40 +1,61 @@
-import React, {useState} from 'react';
+import React, {Component} from 'react';
 import './filter-item.css';
 import PropTypes from 'prop-types';
 
-/* eslint-disable react/prop-types */
+export default class FilterItem extends Component {
+    constructor(props) {
+        super(props);
 
-const FilterItem = ({label, onFilterChange, selected}) => {
+    }
 
-    // const [selected, setSelected] = useState(false);
-    // let classNames = '';
-    //
-    // if (selected) {
-    //     classNames ='selected';
-    // }
+    render(){
+        const {label, onFilterChange, selected} = this.props;
 
-    let classNames = selected ? 'selected' : '';
+        let classNames = selected ? 'selected' : '';
 
-    return (
+        return (
             <button className={classNames} onClick={() => {
-                // setSelected(!selected);
                 onFilterChange(label);
             }}>
                 {label}
             </button>
 
-    );
+        );
+    }
 }
+// const FilterItem = ({label, onFilterChange, selected}) => {
+//
+//     // const [selected, setSelected] = useState(false);
+//     // let classNames = '';
+//     //
+//     // if (selected) {
+//     //     classNames ='selected';
+//     // }
+//
+//     let classNames = selected ? 'selected' : '';
+//
+//     return (
+//             <button className={classNames} onClick={() => {
+//                 // setSelected(!selected);
+//                 onFilterChange(label);
+//             }}>
+//                 {label}
+//             </button>
+//
+//     );
+// }
 
 
 FilterItem.defaultProps = {
     label: 'All',
-    onFilterChange: () => {}
+    onFilterChange: () => {},
+    selected: false,
 };
 
 FilterItem.propTypes = {
-    label: PropTypes.string.isRequired, // label должен быть строкой и обязательным
-    onFilterChange: PropTypes.func.isRequired // onFilterChange должен быть функцией и обязательным
+    label: PropTypes.string.isRequired,
+    onFilterChange: PropTypes.func.isRequired,
+    selected: PropTypes.bool,
 };
 
-export default FilterItem;
+// export default FilterItem;

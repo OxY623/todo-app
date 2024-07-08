@@ -3,7 +3,7 @@ import Task from '../task';
 import '../task/task.css';
 import PropTypes from 'prop-types';
 
-/* eslint-disable react/prop-types */
+
 
 export default class TaskList extends Component {
     render() {
@@ -31,34 +31,17 @@ TaskList.defaultProps = {
     tasks: [],
     onDeleted: () => {},
     onEdited: () => {},
-    onToggle: () => {},
-    filterItems: [],
-    setFilter: () => {},
-    filter: '',
-    onFilterChange: () => {},
-    isCompleted: false,
-    isEditing: false,
-    onSwitchEditing: () => {},
-
+    onToggle: () => {}
 }
 
 TaskList.propTypes = {
     tasks: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.number.isRequired,
         title: PropTypes.string.isRequired,
-        completed: PropTypes.bool.isRequired,
+        completed: PropTypes.bool.isRequired
     })),
     onDeleted: PropTypes.func,
     onEdited: PropTypes.func,
-    onToggle: PropTypes.func,
-    filterItems: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-    })),
-    setFilter: PropTypes.func,
-    filter: PropTypes.string,
-    onFilterChange: PropTypes.func,
-    isCompleted: PropTypes.bool,
-    isEditing: PropTypes.bool,
-    onSwitchEditing: PropTypes.func,
+    onToggle: PropTypes.func
 }
+

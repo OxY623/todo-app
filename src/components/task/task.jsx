@@ -1,22 +1,21 @@
-import React, {Component} from 'react';
-import {formatDistanceToNow} from "date-fns"
+import React, { Component } from 'react';
+import { formatDistanceToNow } from "date-fns";
 import PropTypes from 'prop-types';
-
-/* eslint-disable react/prop-types */
 
 export default class Task extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            editing: false,
-            editText: props.task.title,
+            editing: null,
+            editText: props.task.title || '',
+            checked: false,
         };
     }
 
     onSwitchEditing = () => {
         this.setState(({ editing }) => {
-            return { editing: !editing }
-        })
+            return { editing: !editing };
+        });
     }
 
     handleEditChange = (event) => {
@@ -30,21 +29,21 @@ export default class Task extends Component {
         }
     }
 
+    onToggleItem = () => {
+        const { task, onToggle } = this.props;
+        const { checked } = this.state;
+        this.setState({ checked: !checked });
+        onToggle(task.id);
+    }
+
     render() {
-        const { onDeleted, task, onToggle } = this.props;
-        const { editing, editText } = this.state;
-        const onToggleItem = onToggle.bind(this, task.id);
-        let checked = null;
+        const { onDeleted, task } = this.props;
+        const { editing, editText, checked } = this.state;
         let classNames = task.completed ? 'completed' : '';
-        if (classNames==="completed"){
-            checked = 'checked';
-        }
         if (editing && !task.completed) {
             classNames = 'editing';
         }
 
-        // console.log(editing);
-        // console.log(classNames);
         const createdTask = formatDistanceToNow(new Date(task.created));
 
         return (
@@ -53,8 +52,8 @@ export default class Task extends Component {
                     <input
                         className="toggle"
                         type="checkbox"
-                        onChange={onToggleItem}
-                        checked = {checked}
+                        onChange={this.onToggleItem}
+                        checked={checked}
                     />
                     <label>
                         <span className="description">{task.title}</span>
@@ -76,14 +75,26 @@ export default class Task extends Component {
         );
     }
 }
+
 Task.defaultProps = {
-    task: {},
-    onDeleted: () => {},
-    onToggle: () => {},
-    onEdited: () => {},
+    task: {
+        id: 0,
+        title: '',
+        completed: false,
+        created: new Date(),
+    },
+    onDeleted: () => { },
+    onToggle: () => { },
+    onEdited: () => { },
 };
+
 Task.propTypes = {
-    task: PropTypes.object.isRequired,
+    task: PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        title: PropTypes.string.isRequired,
+        completed: PropTypes.bool.isRequired,
+        created: PropTypes.instanceOf(Date).isRequired,
+    }).isRequired,
     onDeleted: PropTypes.func.isRequired,
     onToggle: PropTypes.func.isRequired,
     onEdited: PropTypes.func.isRequired,

@@ -3,7 +3,7 @@ import FilterItem from '../filter-item';
 import '../tasks-filter/tasks-filter.css';
 import PropTypes from 'prop-types';
 
-/* eslint-disable react/prop-types */
+
 
 export default class TasksFilter extends Component {
     constructor(props) {
@@ -14,17 +14,18 @@ export default class TasksFilter extends Component {
     }
 
     handleFilterChange = (label) => {
-        this.setState({ selectedFilter: label });
+        this.setState({selectedFilter: label});
         this.props.onFilterChange(label);
     };
 
     render() {
-        const { filterItems, onFilterChange } = this.props;
-        const { selectedFilter } = this.state;
+        const {filterItems, onFilterChange} = this.props;
+        const {selectedFilter} = this.state;
 
         const filterElements = filterItems.map(filter => (
             <li key={filter.id}>
                 <FilterItem
+                    key={filter.id}
                     label={filter.name}
                     onFilterChange={this.handleFilterChange}
                     selected={selectedFilter === filter.name}
@@ -43,7 +44,8 @@ export default class TasksFilter extends Component {
 
 TasksFilter.defaultProps = {
     filterItems: [],
-    onFilterChange: () => {}
+    onFilterChange: () => {},
+    initialFilter: null
 };
 
 TasksFilter.propTypes = {
@@ -52,6 +54,5 @@ TasksFilter.propTypes = {
         name: PropTypes.string.isRequired
     })).isRequired,
     onFilterChange: PropTypes.func.isRequired,
-}
-
-
+    initialFilter: PropTypes.string
+};
