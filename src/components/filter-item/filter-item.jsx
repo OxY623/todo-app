@@ -1,27 +1,28 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import './filter-item.css';
 import PropTypes from 'prop-types';
 
 export default class FilterItem extends Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
+  }
 
-    }
+  render() {
+    const { label, onFilterChange, selected } = this.props;
 
-    render(){
-        const {label, onFilterChange, selected} = this.props;
+    let classNames = selected ? 'selected' : '';
 
-        let classNames = selected ? 'selected' : '';
-
-        return (
-            <button className={classNames} onClick={() => {
-                onFilterChange(label);
-            }}>
-                {label}
-            </button>
-
-        );
-    }
+    return (
+      <button
+        className={classNames}
+        onClick={() => {
+          onFilterChange(label);
+        }}
+      >
+        {label}
+      </button>
+    );
+  }
 }
 // const FilterItem = ({label, onFilterChange, selected}) => {
 //
@@ -45,17 +46,16 @@ export default class FilterItem extends Component {
 //     );
 // }
 
-
 FilterItem.defaultProps = {
-    label: 'All',
-    onFilterChange: () => {},
-    selected: false,
+  label: 'All',
+  onFilterChange: () => {},
+  selected: false,
 };
 
 FilterItem.propTypes = {
-    label: PropTypes.string.isRequired,
-    onFilterChange: PropTypes.func.isRequired,
-    selected: PropTypes.bool,
+  label: PropTypes.string.isRequired,
+  onFilterChange: PropTypes.func.isRequired,
+  selected: PropTypes.bool,
 };
 
 // export default FilterItem;
