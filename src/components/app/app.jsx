@@ -13,9 +13,10 @@ export default class App extends Component {
         super(props);
         this.maxId = 100;
         this.filterItems = [
-            { id: 1, name: "All" },
-            { id: 2, name: "Active" },
-            { id: 3, name: "Completed" }
+            this.createFilterItems(1, 'All'),
+            this.createFilterItems(2, 'Active'),
+            this.createFilterItems(3, 'Completed')
+
         ];
         this.state = {
             tasks: [
@@ -25,6 +26,13 @@ export default class App extends Component {
             ],
             filter: 'All'
         };
+    }
+
+    createFilterItems = (id, text) => {
+        return {
+            id: id,
+            name: text
+        }
     }
 
     createTodoItem = (label) => {
@@ -39,50 +47,50 @@ export default class App extends Component {
     addTaskItem = (text) => {
         this.setState((state) => {
             const newTask = this.createTodoItem(text);
-            return { tasks: [...state.tasks, newTask] };
+            return {tasks: [...state.tasks, newTask]};
         });
     }
 
     deleteTaskItem = (id) => {
         this.setState((state) => {
             const updatedTasks = state.tasks.filter(task => task.id !== id);
-            return { tasks: updatedTasks };
+            return {tasks: updatedTasks};
         });
     }
 
     editTaskItem = (id, newText) => {
         this.setState((state) => {
             const updatedTasks = state.tasks.map(task => {
-                return (task.id === id) ? { ...task, title: newText, created: new Date() } : task;
+                return (task.id === id) ? {...task, title: newText, created: new Date()} : task;
             });
-            return { tasks: updatedTasks };
+            return {tasks: updatedTasks};
         });
     }
 
     toggleTaskItem = (id) => {
         this.setState((state) => {
             const updatedTasks = state.tasks.map(task => {
-                return (task.id === id) ? { ...task, completed: !task.completed } : task;
+                return (task.id === id) ? {...task, completed: !task.completed} : task;
             });
-            return { tasks: updatedTasks };
+            return {tasks: updatedTasks};
         });
     }
 
     setFilter = (filter) => {
-        this.setState({ filter });
+        this.setState({filter});
     }
 
     clearCompleted = () => {
         this.setState((state) => {
-            const updatedTasks = state.tasks.filter(task =>!task.completed);
-            return { tasks: updatedTasks };
+            const updatedTasks = state.tasks.filter(task => !task.completed);
+            return {tasks: updatedTasks};
         });
     }
 
     render() {
-        const { tasks, filter } = this.state;
-        let countItemsCompleted = tasks.reduce((acc, task) =>{
-            return !task.completed? acc : acc + 1;
+        const {tasks, filter} = this.state;
+        let countItemsCompleted = tasks.reduce((acc, task) => {
+            return !task.completed ? acc : acc + 1;
         }, 0);
 
         const filteredTasks = tasks.filter(task => {
@@ -95,7 +103,7 @@ export default class App extends Component {
             <section className="todoapp">
                 <header className="header">
                     <h1>todos</h1>
-                    <NewTaskForm onAdded={this.addTaskItem} />
+                    <NewTaskForm onAdded={this.addTaskItem}/>
                 </header>
                 <section className="main">
                     <TaskList
@@ -105,10 +113,10 @@ export default class App extends Component {
                         tasks={filteredTasks}
                     />
                     <Footer
-                        clearCompleted = {this.clearCompleted}
+                        clearCompleted={this.clearCompleted}
                         filterItems={this.filterItems}
                         setFilter={this.setFilter}
-                        count = {countItemsCompleted}
+                        count={countItemsCompleted}
 
                     />
                 </section>
