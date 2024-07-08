@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
-import FilterItem from '../filter-item';
-import '../tasks-filter/tasks-filter.css';
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+
+import FilterItem from '../filter-item';
+
+import '../tasks-filter/tasks-filter.css';
 
 export default class TasksFilter extends Component {
   constructor(props) {
@@ -17,7 +19,7 @@ export default class TasksFilter extends Component {
   };
 
   render() {
-    const { filterItems, onFilterChange } = this.props;
+    const { filterItems } = this.props;
     const { selectedFilter } = this.state;
 
     const filterElements = filterItems.map((filter) => (
@@ -42,7 +44,6 @@ export default class TasksFilter extends Component {
 
 TasksFilter.defaultProps = {
   filterItems: [],
-  onFilterChange: () => {},
   initialFilter: null,
 };
 

@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
-import './filter-item.css';
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+
+import './filter-item.css';
 
 export default class FilterItem extends Component {
   constructor(props) {

@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import '../../index.css';
+
 import NewTaskForm from '../new-task-form';
-import '../new-task-form/new-task-form.css';
 import Footer from '../footer';
-import '../footer/footer.css';
 import TaskList from '../task-list';
+
 import '../task-list/task-list.css';
+import '../../index.css';
+import '../new-task-form/new-task-form.css';
+import '../footer/footer.css';
 
 export default class App extends Component {
   constructor(props) {
