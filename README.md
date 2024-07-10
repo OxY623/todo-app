@@ -12,7 +12,7 @@ The application also displays the count of uncompleted tasks.
 - Clear all completed tasks
 - Display count of uncompleted tasks
 
-## Link: [TODO APP](https://todo-eq547rn66-ox-y.vercel.app/)
+## Link: [TODO APP](https://todo-app-oxy623-ox-y.vercel.app/)
 
 # TODO Приложение
 
@@ -28,4 +28,4 @@ The application also displays the count of uncompleted tasks.
 - Удаление всех завершенных задач
 - Отображение количества незавершенных задач
 
-## Ссылка: [TODO Приложение](https://todo-eq547rn66-ox-y.vercel.app/)
+## Ссылка: [TODO Приложение](https://todo-app-oxy623-ox-y.vercel.app/)
