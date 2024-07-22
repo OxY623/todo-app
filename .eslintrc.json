@@ -20,6 +20,8 @@
   },
   "plugins": ["react", "prettier", "import"],
   "rules": {
+    "arrow-body-style": "off",
+//    "arrow-body-style": ["error", "as-needed"],
     "indent": ["error", 2],
     "prettier/prettier": "error",
     "linebreak-style": [0, "unix"],
@@ -38,6 +40,9 @@
     ]
   },
   "settings": {
+    "react": {
+      "version": "detect" // автоматически определяет версию React
+    },
     "import/resolver": {
       "node": {
         "extensions": [".js", ".jsx", ".ts", ".tsx"],
