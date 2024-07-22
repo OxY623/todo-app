@@ -112,7 +112,12 @@ export default class App extends Component {
       <section className="todoapp">
         <header className="header">
           <h1>todos</h1>
-          <NewTaskForm onAdded={this.addTaskItem} />
+          {/*<NewTaskForm onAdded={this.addTaskItem} />*/}
+          <form className="new-todo-form">
+            <NewTaskForm onAdded={this.addTaskItem} />
+            <input className="new-todo-form__timer" placeholder="Min" autoFocus />
+            <input className="new-todo-form__timer" placeholder="Sec" autoFocus />
+          </form>
         </header>
         <section className="main">
           <TaskList
