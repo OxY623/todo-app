@@ -45,6 +45,10 @@ export default class App extends Component {
   };
 
   addTaskItem = (text) => {
+    if (text.length === 0) {
+      window.alert('Вы ничего не задали в этом задании');
+      return;
+    }
     this.setState((state) => {
       const newTask = this.createTodoItem(text);
       return { tasks: [...state.tasks, newTask] };
@@ -59,6 +63,11 @@ export default class App extends Component {
   };
 
   editTaskItem = (id, newText) => {
+    if (newText.length === 0) {
+      window.alert('Вы ничего не задали в этом задании');
+      return;
+    }
+
     this.setState((state) => {
       const updatedTasks = state.tasks.map((task) => {
         return task.id === id ? { ...task, title: newText, created: new Date() } : task;
@@ -90,7 +99,7 @@ export default class App extends Component {
   render() {
     const { tasks, filter } = this.state;
     let countItemsCompleted = tasks.reduce((acc, task) => {
-      return !task.completed ? acc : acc + 1;
+      return task.completed ? acc : acc + 1;
     }, 0);
 
     const filteredTasks = tasks.filter((task) => {

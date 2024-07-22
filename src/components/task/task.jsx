@@ -8,7 +8,6 @@ export default class Task extends Component {
     this.state = {
       editing: null,
       editText: props.task.title || '',
-      checked: false,
     };
   }
 
@@ -31,14 +30,14 @@ export default class Task extends Component {
 
   onToggleItem = () => {
     const { task, onToggle } = this.props;
-    const { checked } = this.state;
-    this.setState({ checked: !checked });
+    // const { checked } = this.state;
+    // this.setState({ checked: !checked });
     onToggle(task.id);
   };
 
   render() {
     const { onDeleted, task } = this.props;
-    const { editing, editText, checked } = this.state;
+    const { editing, editText } = this.state;
     let classNames = task.completed ? 'completed' : '';
     if (editing && !task.completed) {
       classNames = 'editing';
@@ -49,7 +48,7 @@ export default class Task extends Component {
     return (
       <li className={classNames}>
         <div className="view">
-          <input className="toggle" type="checkbox" onChange={this.onToggleItem} checked={checked} />
+          <input className="toggle" type="checkbox" onChange={this.onToggleItem} checked={task.completed} />
           <label>
             <span className="description">{task.title}</span>
             <span className="created">created {createdTask} ago</span>
