@@ -20,10 +20,11 @@
   },
   "plugins": ["react", "prettier", "import"],
   "rules": {
+    "prettier/prettier": ["error", { "endOfLine": "auto" }],
     "arrow-body-style": "off",
 //    "arrow-body-style": ["error", "as-needed"],
     "indent": ["error", 2],
-    "prettier/prettier": "error",
+//    "prettier/prettier": "error",
     "linebreak-style": [0, "unix"],
     "quotes": ["error", "single"],
     "semi": ["error", "always"],
