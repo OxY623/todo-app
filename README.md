@@ -13,9 +13,8 @@ The application also displays the count of uncompleted tasks.
 - Display count of uncompleted tasks
 - Added timers for every task
 
-## Link: [TODO APP]([https://todo-app-oxy623-ox-y.vercel.app/](https://mytodoapp1989.netlify.app/))
-[https://todo-app-brown-pi-56.vercel.app/](https://mytodoapp1989.netlify.app/)
-
+## Link: [TODO APP]([https://mytodoapp623.netlify.app/]))
+https://mytodoapp623.netlify.app/
 # TODO Приложение
 
 Это простое приложение для управления задачами, созданное с использованием React.
@@ -31,7 +30,7 @@ The application also displays the count of uncompleted tasks.
 - Отображение количества незавершенных задач
 - Каждой задаче добавлены таймеры
 
-## Ссылка: [TODO Приложение]([https://todo-app-oxy623-ox-y.vercel.app/](https://mytodoapp1989.netlify.app/))
+## Ссылка: [TODO Приложение]([https://mytodoapp623.netlify.app/]))
 
-[https://todo-app-brown-pi-56.vercel.app/](https://mytodoapp1989.netlify.app/)
+https://mytodoapp623.netlify.app/
 
