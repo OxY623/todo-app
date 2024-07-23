@@ -61,8 +61,6 @@ export default class App extends Component {
   });
 
   addTaskItem = (text, min = 30, sec = 0) => {
-    console.log(min, ':', sec);
-
     // Проверка на пустое задание
     if (text.length === 0) {
       window.alert('Вы ничего не задали в этом задании. Попробуйте снова.');
@@ -90,7 +88,6 @@ export default class App extends Component {
 
     const dateTime = new Date();
     dateTime.setHours(finalHours, finalMinutes, totalSeconds, 0);
-    console.log(dateTime);
     // Обновление состояния с новым заданием
     this.setState((state) => ({
       tasks: [...state.tasks, this.createTodoItem(text, dateTime)],

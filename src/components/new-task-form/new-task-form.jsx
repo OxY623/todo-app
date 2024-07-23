@@ -4,7 +4,6 @@ import React, { Component } from 'react';
 export default class NewTaskForm extends Component {
   constructor(props) {
     super(props);
-    // this.handleKeyDown = this.handleKeyDown.bind(this);
     this.state = {
       text: '',
       min: '',
@@ -16,7 +15,6 @@ export default class NewTaskForm extends Component {
     if (event.key === 'Enter') {
       event.preventDefault();
       const { text, min, sec } = this.state;
-      console.log(min, sec);
       this.props.onAdded(text, min, sec);
       this.setState({ text: '', min: '', sec: '' });
     }
