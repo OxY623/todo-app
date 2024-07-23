@@ -31,15 +31,21 @@ export default class Task extends Component {
     this.props.onToggle(this.props.task.id);
   };
 
-  formatTime(date) {
+  formatTime = (date) => {
     const d = new Date(date);
-    const minutes = d.getUTCMinutes().toString().padStart(2, '0');
-    const seconds = d.getUTCSeconds().toString().padStart(2, '0');
-    return `${minutes}:${seconds}`;
-  }
+    const hours = d.getHours().toString().padStart(2, '0');
+    const minutes = d.getMinutes().toString().padStart(2, '0');
+    const seconds = d.getSeconds().toString().padStart(2, '0');
+
+    if (hours === '00') {
+      return `${minutes}:${seconds}`;
+    }
+
+    return `${hours}:${minutes}:${seconds}`;
+  };
 
   render() {
-    const { onDeleted, task, isPaused, activeTaskId, startTimer, stopTimer } = this.props;
+    const { onDeleted, task, startTimer, stopTimer } = this.props;
     const { editing, editText } = this.state;
     let classNames = task.completed ? 'completed' : '';
     if (editing && !task.completed) {
@@ -57,8 +63,8 @@ export default class Task extends Component {
             <span className="description">
               {!task.completed ? (
                 <button
-                  className={`icon ${!isPaused && activeTaskId === task.id ? 'icon-pause' : 'icon-play'}`}
-                  onClick={() => (!isPaused && activeTaskId === task.id ? stopTimer() : startTimer(task.id))}
+                  className={`icon ${task.isPaused ? 'icon-play' : 'icon-pause'}`}
+                  onClick={task.isPaused ? () => startTimer(task.id) : () => stopTimer(task.id)}
                 ></button>
               ) : null}
               {!task.completed ? this.formatTime(task.date) : null}
@@ -83,12 +89,6 @@ export default class Task extends Component {
 }
 
 Task.defaultProps = {
-  task: {
-    id: 0,
-    title: '',
-    completed: false,
-    created: new Date(),
-  },
   onDeleted: () => {},
   onToggle: () => {},
   onEdited: () => {},
@@ -97,17 +97,18 @@ Task.defaultProps = {
 
 Task.propTypes = {
   task: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-    completed: PropTypes.bool.isRequired,
-    created: PropTypes.instanceOf(Date).isRequired,
+    id: PropTypes.number,
+    title: PropTypes.string,
+    completed: PropTypes.bool,
+    created: PropTypes.object,
+    date: PropTypes.object,
+    isPaused: PropTypes.bool,
+    timerId: PropTypes.number,
   }).isRequired,
-  onDeleted: PropTypes.func.isRequired,
-  onToggle: PropTypes.func.isRequired,
-  onEdited: PropTypes.func.isRequired,
-  onUpdateTime: PropTypes.func.isRequired,
-  isPaused: PropTypes.bool.isRequired,
-  activeTaskId: PropTypes.number,
-  startTimer: PropTypes.func.isRequired,
-  stopTimer: PropTypes.func.isRequired,
+  onDeleted: PropTypes.func,
+  onToggle: PropTypes.func,
+  onEdited: PropTypes.func,
+  onUpdateTime: PropTypes.func,
+  startTimer: PropTypes.func,
+  stopTimer: PropTypes.func,
 };

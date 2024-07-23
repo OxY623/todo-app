@@ -42,7 +42,7 @@
   },
   "settings": {
     "react": {
-      "version": "detect" // автоматически определяет версию React
+      "version": "detect"
     },
     "import/resolver": {
       "node": {
