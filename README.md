@@ -13,10 +13,10 @@ The application also displays the count of uncompleted tasks.
 - Display count of uncompleted tasks
 - Added timers for every task
 
-## Link: [TODO APP]([https://mytodoapp623.netlify.app/])
+## Link: [TODO APP](https://mytodoapp623.netlify.app/)
 https://mytodoapp623.netlify.app/
-# TODO Приложение
 
+# TODO Приложение
 
 Это простое приложение для управления задачами, созданное с использованием React.
 Оно позволяет пользователям добавлять задачи, фильтровать задачи по их статусу (Все, Активные, Завершенные) и удалять завершенные задачи.
@@ -31,7 +31,6 @@ https://mytodoapp623.netlify.app/
 - Отображение количества незавершенных задач
 - Каждой задаче добавлены таймеры
 
-## Ссылка: [TODO Приложение]([https://mytodoapp623.netlify.app/])
+## Ссылка: [TODO Приложение](https://mytodoapp623.netlify.app/)
 
-https://mytodoapp623.netlify.app/
 
