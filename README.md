@@ -11,4 +11,27 @@ The application also displays the count of uncompleted tasks.
 - Filter tasks (All, Active, Completed)
 - Clear all completed tasks
 - Display count of uncompleted tasks
+- Added timers for every task
+
+## Link: [TODO APP]([https://todo-app-oxy623-ox-y.vercel.app/](https://mytodoapp1989.netlify.app/))
+[https://todo-app-brown-pi-56.vercel.app/](https://mytodoapp1989.netlify.app/)
+
+# TODO Приложение
+
+Это простое приложение для управления задачами, созданное с использованием React.
+Оно позволяет пользователям добавлять задачи, фильтровать задачи по их статусу (Все, Активные, Завершенные) и удалять завершенные задачи.
+Приложение также отображает количество незавершенных задач.
+
+## Функционал
+
+- Добавление задач
+- Отметка задач как выполненных
+- Фильтрация задач (Все, Активные, Завершенные)
+- Удаление всех завершенных задач
+- Отображение количества незавершенных задач
+- Каждой задаче добавлены таймеры
+
+## Ссылка: [TODO Приложение]([https://todo-app-oxy623-ox-y.vercel.app/](https://mytodoapp1989.netlify.app/))
+
+[https://todo-app-brown-pi-56.vercel.app/](https://mytodoapp1989.netlify.app/)
 
