@@ -6,7 +6,8 @@ import '../task/task.css';
 
 export default class TaskList extends Component {
   render() {
-    const { tasks, onDeleted, onEdited, onToggle, onUpdateTime } = this.props;
+    const { tasks, onDeleted, onEdited, onToggle, onUpdateTime, isPaused, activeTaskId, startTimer, stopTimer } =
+      this.props;
 
     const tasksList = tasks.map((task) => (
       <Task
@@ -16,6 +17,10 @@ export default class TaskList extends Component {
         onEdited={onEdited}
         onToggle={onToggle}
         onUpdateTime={onUpdateTime}
+        isPaused={isPaused}
+        activeTaskId={activeTaskId}
+        startTimer={startTimer}
+        stopTimer={stopTimer}
       />
     ));
 
@@ -29,6 +34,10 @@ TaskList.defaultProps = {
   onEdited: () => {},
   onToggle: () => {},
   onUpdateTime: () => {},
+  isPaused: true,
+  activeTaskId: null,
+  startTimer: () => {},
+  stopTimer: () => {},
 };
 
 TaskList.propTypes = {
@@ -42,5 +51,9 @@ TaskList.propTypes = {
   onDeleted: PropTypes.func,
   onEdited: PropTypes.func,
   onToggle: PropTypes.func,
-  onUpdateTime: PropTypes.func.isRequired,
+  onUpdateTime: PropTypes.func,
+  isPaused: PropTypes.bool,
+  activeTaskId: PropTypes.number,
+  startTimer: PropTypes.func,
+  stopTimer: PropTypes.func,
 };

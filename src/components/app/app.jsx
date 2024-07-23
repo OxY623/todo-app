@@ -19,27 +19,44 @@ export default class App extends Component {
     ];
     this.state = {
       tasks: [
-        this.createTodoItem('Completed task'),
+        this.createTodoItem('Completed task', true),
         this.createTodoItem('Editing task'),
         this.createTodoItem('Active task'),
       ],
       filter: 'All',
+      isPaused: true,
+      activeTaskId: null,
     };
   }
+
+  componentDidMount() {
+    this.timerId = setInterval(this.updateTime, 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timerId);
+  }
+
+  updateTime = () => {
+    const { isPaused, activeTaskId } = this.state;
+    if (!isPaused && activeTaskId) {
+      this.onUpdateTime(activeTaskId);
+    }
+  };
 
   createFilterItems = (id, text) => ({
     id,
     name: text,
   });
 
-  createTodoItem = (label, date = new Date().setHours(0, 30, 0, 0)) => ({
+  createTodoItem = (label, completed = false) => ({
     id: ++this.maxId,
     title: label,
-    completed: false,
+    completed,
     created: new Date(),
-    date: new Date(date),
+    date: new Date(new Date().setHours(0, 30, 0, 0)),
   });
-  // Добавление новой задачи
+
   addTaskItem = (text, min = 30, sec = 0) => {
     if (text.length === 0) {
       window.alert('Вы ничего не задали в этом задании. Попробуйте снова.');
@@ -53,18 +70,17 @@ export default class App extends Component {
     }
     const dateTime = new Date();
     dateTime.setHours(0, minNum, secNum, 0);
-    // console.log(dateTime);
     this.setState((state) => ({
-      tasks: [...state.tasks, this.createTodoItem(text, dateTime)],
+      tasks: [...state.tasks, this.createTodoItem(text)],
     }));
   };
-  // Удаление задачи по идентификатору
+
   deleteTaskItem = (id) => {
     this.setState((state) => ({
       tasks: state.tasks.filter((task) => task.id !== id),
     }));
   };
-  // Редактирование задачи
+
   editTaskItem = (id, newText) => {
     if (newText.length === 0) {
       window.alert('Вы ничего не задали в этом задании');
@@ -74,13 +90,13 @@ export default class App extends Component {
       tasks: state.tasks.map((task) => (task.id === id ? { ...task, title: newText, created: new Date() } : task)),
     }));
   };
-  // Переключение состояния задачи (выполнена/не выполнена)
+
   toggleTaskItem = (id) => {
     this.setState((state) => ({
       tasks: state.tasks.map((task) => (task.id === id ? { ...task, completed: !task.completed } : task)),
     }));
   };
-  // Обновление времени до окончания задачи
+
   onUpdateTime = (id) => {
     this.setState((state) => ({
       tasks: state.tasks.map((task) => {
@@ -88,7 +104,6 @@ export default class App extends Component {
           const newDate = new Date(task.date);
           newDate.setSeconds(newDate.getSeconds() - 1);
 
-          // Если время достигло 00:00, помечаем задачу как завершенную
           if (newDate.getMinutes() === 0 && newDate.getSeconds() === 0) {
             return { ...task, date: newDate, completed: true };
           }
@@ -99,28 +114,34 @@ export default class App extends Component {
       }),
     }));
   };
-  // Завершение выполненной задачи
+
   onCompleteTask = (id) => {
     this.setState((state) => ({
       tasks: state.tasks.map((task) => (task.id === id ? { ...task, completed: true } : task)),
     }));
   };
-  // Смена фильтра
+
   setFilter = (filter) => {
     this.setState({ filter });
   };
-  // Очистка выполненных задач
+
   clearCompleted = () => {
     this.setState((state) => ({
       tasks: state.tasks.filter((task) => !task.completed),
     }));
   };
 
+  startTimer = (id) => {
+    this.setState({ isPaused: false, activeTaskId: id });
+  };
+
+  stopTimer = () => {
+    this.setState({ isPaused: true, activeTaskId: null });
+  };
+
   render() {
-    const { tasks, filter } = this.state;
-    //Подсчет незавершенных задач
+    const { tasks, filter, isPaused, activeTaskId } = this.state;
     const countItemsCompleted = tasks.reduce((acc, task) => (task.completed ? acc : acc + 1), 0);
-    //Фильтрация задач по фильтру
     const filteredTasks = tasks.filter((task) => {
       if (filter === 'Active') return !task.completed;
       if (filter === 'Completed') return task.completed;
@@ -141,6 +162,10 @@ export default class App extends Component {
             onUpdateTime={this.onUpdateTime}
             onComplete={this.onCompleteTask}
             tasks={filteredTasks}
+            isPaused={isPaused}
+            activeTaskId={activeTaskId}
+            startTimer={this.startTimer}
+            stopTimer={this.stopTimer}
           />
           <Footer
             clearCompleted={this.clearCompleted}
