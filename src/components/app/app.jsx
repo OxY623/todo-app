@@ -97,26 +97,6 @@ export default class App extends Component {
     }));
   };
 
-  // addTaskItem = (text, min = 30, sec = 0) => {
-  //   console.log(min, ':', sec);
-  //   if (text.length === 0) {
-  //     window.alert('Вы ничего не задали в этом задании. Попробуйте снова.');
-  //     return;
-  //   }
-  //   const minNum = Number(min);
-  //   const secNum = Number(sec);
-  //   if (isNaN(minNum) || isNaN(secNum)) {
-  //     window.alert('Введите корректные значения для минут и секунд.');
-  //     return;
-  //   }
-
-  //   const dateTime = new Date();
-  //   dateTime.setHours(0, minNum, secNum, 0);
-  //   this.setState((state) => ({
-  //     tasks: [...state.tasks, this.createTodoItem(text, dateTime)],
-  //   }));
-  // };
-
   deleteTaskItem = (id) => {
     this.setState((state) => {
       const task = state.tasks.find((task) => task.id === id);
