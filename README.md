@@ -14,7 +14,7 @@ The application also displays the count of uncompleted tasks.
 - Added timers for every task
 
 ## Link: [TODO APP](https://oxy-todo-app.netlify.app/)
-https://mytodoapp623.netlify.app/
+[https://mytodoapp623.netlify.app/](https://oxy-todo-app.netlify.app/)
 
 # TODO Приложение
 
