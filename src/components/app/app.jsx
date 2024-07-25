@@ -28,9 +28,9 @@ export default class App extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // Очистка таймеров для удалённых задач
     prevState.tasks.forEach((task, index) => {
-      if (task.timerId && !this.state.tasks[index].timerId) {
+      const currentTask = this.state.tasks[index];
+      if (task.timerId && (!currentTask || !currentTask.timerId)) {
         clearInterval(task.timerId);
       }
     });
@@ -95,6 +95,7 @@ export default class App extends Component {
   };
 
   deleteTaskItem = (id) => {
+    this.stopTimer(id);
     this.setState((state) => {
       const task = state.tasks.find((task) => task.id === id);
       if (task && task.timerId) {
@@ -117,6 +118,7 @@ export default class App extends Component {
   };
 
   toggleTaskItem = (id) => {
+    this.stopTimer(id);
     this.setState((state) => ({
       tasks: state.tasks.map((task) => (task.id === id ? { ...task, completed: !task.completed } : task)),
     }));
