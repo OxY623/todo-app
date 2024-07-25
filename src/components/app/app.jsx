@@ -45,6 +45,10 @@ export default class App extends Component {
     });
   }
 
+  /**
+   * @param {number} id
+   * @param {string} text
+   */
   createFilterItems = (id, text) => ({
     id,
     name: text,
@@ -108,6 +112,7 @@ export default class App extends Component {
   };
 
   editTaskItem = (id, newText) => {
+    this.stopTimer(id);
     if (newText.length === 0) {
       window.alert('Вы ничего не задали в этом задании');
       return;
