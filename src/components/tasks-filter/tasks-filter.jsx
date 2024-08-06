@@ -1,50 +1,40 @@
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 
 import FilterItem from '../filter-item';
 
 import '../tasks-filter/tasks-filter.css';
 
-export default class TasksFilter extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedFilter: null,
-    };
-  }
+const TasksFilter = ({
+  filterItems = [{ 1: 'All' }, { 2: 'Active' }, { 3: 'Completed' }],
+  onFilterChange = () => {
+    console.log('Filter change test function'); // eslint-disable-line no-console
+  },
+}) => {
+  const [selectedFilter, setSelectedFilter] = useState(null);
 
-  handleFilterChange = (label) => {
-    this.setState({ selectedFilter: label });
-    this.props.onFilterChange(label);
+  const handleFilterChange = (label) => {
+    setSelectedFilter(label);
+    onFilterChange(label);
   };
 
-  render() {
-    const { filterItems } = this.props;
-    const { selectedFilter } = this.state;
+  const filterElements = filterItems.map((filter) => (
+    <li key={filter.id}>
+      <FilterItem
+        key={filter.id}
+        label={filter.name}
+        onFilterChange={handleFilterChange}
+        selected={selectedFilter === filter.name}
+      />
+    </li>
+  ));
 
-    const filterElements = filterItems.map((filter) => (
-      <li key={filter.id}>
-        <FilterItem
-          key={filter.id}
-          label={filter.name}
-          onFilterChange={this.handleFilterChange}
-          selected={selectedFilter === filter.name}
-        />
-      </li>
-    ));
-
-    return (
-      <ul className="filters">
-        {filterElements}
-        {}
-      </ul>
-    );
-  }
-}
-
-TasksFilter.defaultProps = {
-  filterItems: [],
-  initialFilter: null,
+  return (
+    <ul className="filters">
+      {filterElements}
+      {}
+    </ul>
+  );
 };
 
 TasksFilter.propTypes = {
@@ -57,3 +47,5 @@ TasksFilter.propTypes = {
   onFilterChange: PropTypes.func.isRequired,
   initialFilter: PropTypes.string,
 };
+
+export default TasksFilter;
