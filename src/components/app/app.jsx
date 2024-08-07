@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 
 import NewTaskForm from '../new-task-form';
 import Footer from '../footer';
@@ -8,219 +8,190 @@ import '../../index.css';
 import '../new-task-form/new-task-form.css';
 import '../footer/footer.css';
 
-export default class App extends Component {
-  constructor(props) {
-    super(props);
-    this.maxId = 100;
-    this.filterItems = [
-      this.createFilterItems(1, 'All'),
-      this.createFilterItems(2, 'Active'),
-      this.createFilterItems(3, 'Completed'),
-    ];
-    this.state = {
-      tasks: [
-        this.createTodoItem('Completed task'),
-        this.createTodoItem('Editing task'),
-        this.createTodoItem('Active task'),
-      ],
-      filter: 'All',
+const App = () => {
+  const maxId = useRef(100);
+  const filterItems = [
+    { id: 1, name: 'All' },
+    { id: 2, name: 'Active' },
+    { id: 3, name: 'Completed' },
+  ];
+
+  const createTodoItem = (label, date = new Date().setHours(0, 30, 0, 0)) => {
+    maxId.current += 1;
+    return {
+      id: maxId.current,
+      title: label,
+      completed: false,
+      created: new Date(),
+      date: new Date(date),
+      isPaused: true,
+      timerId: null,
     };
-  }
+  };
 
-  componentDidUpdate(prevProps, prevState) {
-    prevState.tasks.forEach((task, index) => {
-      const currentTask = this.state.tasks[index];
-      if (task.timerId && (!currentTask || !currentTask.timerId)) {
-        clearInterval(task.timerId);
-      }
-    });
-  }
+  const [tasks, setTasks] = useState([
+    createTodoItem('Completed task'),
+    createTodoItem('Editing task'),
+    createTodoItem('Active task'),
+  ]);
 
-  componentWillUnmount() {
-    // Очистка таймеров для всех задач при размонтировании
-    this.state.tasks.forEach((task) => {
-      if (task.timerId) {
-        clearInterval(task.timerId);
-      }
-    });
-  }
+  const [filter, setFilter] = useState('All');
 
-  /**
-   * @param {number} id
-   * @param {string} text
-   */
-  createFilterItems = (id, text) => ({
-    id,
-    name: text,
-  });
+  useEffect(() => {
+    return () => {
+      tasks.forEach((task) => {
+        if (task.timerId) {
+          clearInterval(task.timerId);
+        }
+      });
+    };
+  }, []);
 
-  createTodoItem = (label, date = new Date().setHours(0, 30, 0, 0)) => ({
-    id: ++this.maxId,
-    title: label,
-    completed: false,
-    created: new Date(),
-    date: new Date(date),
-    isPaused: true,
-    timerId: null,
-  });
-
-  addTaskItem = (text, min = 30, sec = 0) => {
-    // Проверка на пустое задание
+  const addTaskItem = (text, min = 30, sec = 0) => {
     if (text.length === 0) {
       window.alert('Вы ничего не задали в этом задании. Попробуйте снова.');
       return;
     }
 
-    // Преобразование минут и секунд в числа
     const minNum = Number(min);
     const secNum = Number(sec);
 
-    // Проверка на корректность значений
     if (isNaN(minNum) || isNaN(secNum)) {
       window.alert('Введите корректные значения для минут и секунд.');
       return;
     }
 
-    // Перерасчет минут и секунд
     const additionalHours = Math.floor(minNum / 60);
     const totalMinutes = minNum % 60;
     const totalSeconds = secNum % 60;
     const additionalMinutes = Math.floor(secNum / 60);
-
     const finalMinutes = (totalMinutes + additionalMinutes) % 60;
     const finalHours = additionalHours + Math.floor((totalMinutes + additionalMinutes) / 60);
-
     const dateTime = new Date();
     dateTime.setHours(finalHours, finalMinutes, totalSeconds, 0);
-    // Обновление состояния с новым заданием
-    this.setState((state) => ({
-      tasks: [...state.tasks, this.createTodoItem(text, dateTime)],
-    }));
+
+    setTasks((tasks) => [...tasks, createTodoItem(text, dateTime)]);
   };
 
-  deleteTaskItem = (id) => {
-    this.stopTimer(id);
-    this.setState((state) => {
-      const task = state.tasks.find((task) => task.id === id);
-      if (task && task.timerId) {
-        clearInterval(task.timerId);
+  const deleteTaskItem = useCallback(
+    (id) => {
+      stopTimer(id);
+      setTasks((tasks) => tasks.filter((task) => task.id !== id));
+    },
+    [tasks]
+  );
+
+  const editTaskItem = useCallback(
+    (id, newText) => {
+      stopTimer(id);
+      if (newText.length === 0) {
+        window.alert('Вы ничего не задали в этом задании');
+        return;
       }
-      return {
-        tasks: state.tasks.filter((task) => task.id !== id),
-      };
-    });
-  };
+      setTasks((tasks) =>
+        tasks.map((task) => (task.id === id ? { ...task, title: newText, created: new Date() } : task))
+      );
+    },
+    [tasks]
+  );
 
-  editTaskItem = (id, newText) => {
-    this.stopTimer(id);
-    if (newText.length === 0) {
-      window.alert('Вы ничего не задали в этом задании');
-      return;
-    }
-    this.setState((state) => ({
-      tasks: state.tasks.map((task) => (task.id === id ? { ...task, title: newText, created: new Date() } : task)),
-    }));
-  };
+  const toggleTaskItem = useCallback(
+    (id) => {
+      stopTimer(id);
+      setTasks((tasks) => tasks.map((task) => (task.id === id ? { ...task, completed: !task.completed } : task)));
+    },
+    [tasks]
+  );
 
-  toggleTaskItem = (id) => {
-    this.stopTimer(id);
-    this.setState((state) => ({
-      tasks: state.tasks.map((task) => (task.id === id ? { ...task, completed: !task.completed } : task)),
-    }));
-  };
+  const updateTime = useCallback(
+    (id) => {
+      setTasks((tasks) =>
+        tasks.map((task) => {
+          if (task.id === id) {
+            const newDate = new Date(task.date);
+            newDate.setSeconds(newDate.getSeconds() - 1);
 
-  updateTime = (id) => {
-    this.setState((state) => ({
-      tasks: state.tasks.map((task) => {
-        if (task.id === id) {
-          const newDate = new Date(task.date);
-          newDate.setSeconds(newDate.getSeconds() - 1);
+            if (newDate.getMinutes() === 0 && newDate.getSeconds() === 0) {
+              clearInterval(task.timerId);
+              return { ...task, date: newDate, completed: true, isPaused: true, timerId: null };
+            }
 
-          if (newDate.getMinutes() === 0 && newDate.getSeconds() === 0) {
-            clearInterval(task.timerId);
-            return { ...task, date: newDate, completed: true, isPaused: true, timerId: null };
+            return { ...task, date: newDate };
           }
+          return task;
+        })
+      );
+    },
+    [tasks]
+  );
 
-          return { ...task, date: newDate };
-        }
-        return task;
-      }),
-    }));
-  };
-
-  startTimer = (id) => {
-    this.setState((state) => ({
-      tasks: state.tasks.map((task) => {
-        if (task.id === id) {
-          if (task.isPaused) {
-            const timerId = setInterval(() => this.updateTime(id), 1000);
+  const startTimer = useCallback(
+    (id) => {
+      setTasks((tasks) =>
+        tasks.map((task) => {
+          if (task.id === id && task.isPaused) {
+            const timerId = setInterval(() => updateTime(id), 1000);
             return { ...task, isPaused: false, timerId };
           }
-        }
-        return task;
-      }),
-    }));
-  };
+          return task;
+        })
+      );
+    },
+    [tasks, updateTime]
+  );
 
-  stopTimer = (id) => {
-    this.setState((state) => ({
-      tasks: state.tasks.map((task) => {
-        if (task.id === id) {
-          if (!task.isPaused) {
+  const stopTimer = useCallback(
+    (id) => {
+      setTasks((tasks) =>
+        tasks.map((task) => {
+          if (task.id === id && !task.isPaused) {
             clearInterval(task.timerId);
             return { ...task, isPaused: true, timerId: null };
           }
-        }
-        return task;
-      }),
-    }));
+          return task;
+        })
+      );
+    },
+    [tasks]
+  );
+
+  const clearCompleted = () => {
+    setTasks((tasks) => tasks.filter((task) => !task.completed));
   };
 
-  setFilter = (filter) => {
-    this.setState({ filter });
-  };
+  const countItemsCompleted = useMemo(() => tasks.reduce((acc, task) => (task.completed ? acc : acc + 1), 0), [tasks]);
 
-  clearCompleted = () => {
-    this.setState((state) => ({
-      tasks: state.tasks.filter((task) => !task.completed),
-    }));
-  };
+  const filteredTasks = tasks.filter((task) => {
+    if (filter === 'Active') return !task.completed;
+    if (filter === 'Completed') return task.completed;
+    return true;
+  });
 
-  render() {
-    const { tasks, filter } = this.state;
-
-    const countItemsCompleted = tasks.reduce((acc, task) => (task.completed ? acc : acc + 1), 0);
-
-    const filteredTasks = tasks.filter((task) => {
-      if (filter === 'Active') return !task.completed;
-      if (filter === 'Completed') return task.completed;
-      return true;
-    });
-
-    return (
-      <section className="todoapp">
-        <header className="header">
-          <h1>todos</h1>
-          <NewTaskForm onAdded={this.addTaskItem} />
-        </header>
-        <section className="main">
-          <TaskList
-            tasks={filteredTasks}
-            onDeleted={this.deleteTaskItem}
-            onEdited={this.editTaskItem}
-            onToggle={this.toggleTaskItem}
-            onUpdateTime={this.updateTime}
-            startTimer={this.startTimer}
-            stopTimer={this.stopTimer}
-          />
-          <Footer
-            clearCompleted={this.clearCompleted}
-            filterItems={this.filterItems}
-            setFilter={this.setFilter}
-            count={countItemsCompleted}
-          />
-        </section>
+  return (
+    <section className="todoapp">
+      <header className="header">
+        <h1>todos</h1>
+        <NewTaskForm onAdded={addTaskItem} />
+      </header>
+      <section className="main">
+        <TaskList
+          tasks={filteredTasks}
+          onDeleted={deleteTaskItem}
+          onEdited={editTaskItem}
+          onToggle={toggleTaskItem}
+          onUpdateTime={updateTime}
+          startTimer={startTimer}
+          stopTimer={stopTimer}
+        />
+        <Footer
+          clearCompleted={clearCompleted}
+          filterItems={filterItems}
+          setFilter={setFilter}
+          count={countItemsCompleted}
+        />
       </section>
-    );
-  }
-}
+    </section>
+  );
+};
+
+export default App;
